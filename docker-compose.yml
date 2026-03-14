@@ -18,5 +18,22 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./_primary_system/pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      primary_system:
+        condition: service_healthy
+
 volumes:
   primary_system_data:
+  pgadmin_data:
