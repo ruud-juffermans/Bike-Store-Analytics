@@ -7,13 +7,13 @@ The project demonstrates a complete modern data stack: containerized infrastruct
 
 ```
 ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│  primary-system  │     │   orchestrator   │     │   datawarehouse  │     │     superset      │
-│                  │     │                  │     │                  │     │                   │
-│  Source DB       │────▶│  Python EL       │────▶│  raw (tables)    │     │  Dashboards       │
-│  (PostgreSQL)    │     │  pipeline        │     │  staging (views) │────▶│  (Apache Superset) │
-│                  │     │                  │     │  marts (tables)  │     │                   │
-│  9 CSV tables    │     │  dbt-core        │     │                  │     │  http://localhost  │
-│  with FKs        │     │  inspect scripts │     │  Star schema     │     │  :8088             │
+│  primary-system  │     │   orchestrator   │     │   datawarehouse  │     │     superset     │
+│                  │     │                  │     │                  │     │                  │
+│  Source DB       │────▶│  Python EL       │────▶│  raw (tables)    │     │  Dashboards      │
+│  (PostgreSQL)    │     │  pipeline        │     │  staging (views) │────▶│ (Apache Superset)│
+│                  │     │                  │     │  marts (tables)  │     │                  │
+│  9 CSV tables    │     │  dbt-core        │     │                  │     │  http://localhost│
+│  with FKs        │     │  inspect scripts │     │  Star schema     │     │  :8088           │
 └──────────────────┘     └──────────────────┘     └──────────────────┘     └──────────────────┘
      Port 5433                                         Port 5434               Port 8088
 ```
