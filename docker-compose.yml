@@ -10,8 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - primary_system_data:/var/lib/postgresql/data
-      - ./_primary-system/init/source-schema.sql:/docker-entrypoint-initdb.d/01-init.sql
-      - ./_primary-system/data:/data
+      - ./_primary_system/init/source-schema.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./_primary_system/data:/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U primary_user -d primary_system"]
       interval: 5s
