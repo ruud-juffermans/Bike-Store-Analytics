@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: primary_pass
       POSTGRES_DB: primary_system
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - primary_system_data:/var/lib/postgresql/data
       - ./_primary_system/init/source-schema.sql:/docker-entrypoint-initdb.d/01-init.sql
@@ -17,7 +17,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+  warehouse_db:
+    image: postgres:16
+    container_name: warehouse_db
+    environment:
+      POSTGRES_USER: warehouse_user
+      POSTGRES_PASSWORD: warehouse_pass
+      POSTGRES_DB: warehouse_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U warehouse_user -d warehouse_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
@@ -29,11 +44,12 @@ services:
       - "8080:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
-      - ./_primary_system/pgadmin/servers.json:/pgadmin4/servers.json
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
     depends_on:
       primary_system:
         condition: service_healthy
 
 volumes:
   primary_system_data:
+  warehouse_data:
   pgadmin_data:
