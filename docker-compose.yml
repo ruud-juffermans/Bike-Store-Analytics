@@ -1,0 +1,22 @@
+services:
+  primary_system:
+    image: postgres:16
+    container_name: primary_system
+    environment:
+      POSTGRES_USER: primary_user
+      POSTGRES_PASSWORD: primary_pass
+      POSTGRES_DB: primary_system
+    ports:
+      - "5432:5432"
+    volumes:
+      - primary_system_data:/var/lib/postgresql/data
+      - ./_primary-system/init/source-schema.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./_primary-system/data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U primary_user -d primary_system"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  primary_system_data:
