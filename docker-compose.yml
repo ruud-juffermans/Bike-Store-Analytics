@@ -48,6 +48,29 @@ services:
     depends_on:
       primary_system:
         condition: service_healthy
+      warehouse_db:
+        condition: service_healthy
+  orchestrator:
+    build: ./orchestrator
+    container_name: orchestrator
+    depends_on:
+      primary_system:
+        condition: service_healthy
+      warehouse_db:
+        condition: service_healthy
+    environment:
+      SOURCE_HOST: primary_system
+      SOURCE_DB: primary_system
+      SOURCE_USER: primary_user
+      SOURCE_PASSWORD: primary_pass
+      WAREHOUSE_HOST: warehouse_db
+      WAREHOUSE_DB: warehouse_db
+      WAREHOUSE_USER: warehouse_user
+      WAREHOUSE_PASSWORD: warehouse_pass
+    volumes:
+      - ./orchestrator:/orchestrator
+    stdin_open: true
+    tty: true
 
 volumes:
   primary_system_data:

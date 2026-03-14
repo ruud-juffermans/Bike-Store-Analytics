@@ -43,16 +43,37 @@ CSV Files → Source DB → [EL Pipeline] → Warehouse raw schema
 | Transformation | dbt-core + dbt-postgres | Staging views, dimensional models, tests |
 | BI / Visualization | Apache Superset | Interactive dashboards |
 
-## primary-system
-
-**Test:**
+## step 1
+**Init system**
 ```bash
-docker compose up -d primary_system
-# Wait for healthy, then:
+# start system
+docker compose up -d
+
+# see all tables 
 docker exec primary_system psql -U primary_user -d primary_system \
   -c "SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
-# Should list 9 tables
+
+# see order data count
 docker exec primary_system psql -U primary_user -d primary_system \
   -c "SELECT count(*) FROM orders;"
-# Should return 1615
+```
+
+## step 2
+**Run pipeline**
+```bash
+# Run pipeline from primary system -> raw tables in datawarehouse
+docker exec orchestration python extract_load.py 
+
+```
+## step 3
+
+**Test**
+```bash
+# see all raw tables 
+docker exec warehouse_db psql -U warehouse_user -d warehouse_db \
+  -c "SELECT tablename FROM pg_tables WHERE schemaname='raw' ORDER BY tablename;"
+
+# see data count in raw.orders
+docker exec warehouse_db psql -U warehouse_user -d warehouse_db \
+  -c "SELECT count(*) FROM raw.orders;"
 ```

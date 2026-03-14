@@ -1,0 +1,4 @@
+dbt-core==1.11.7
+dbt-postgres==1.10.0
+psycopg2-binary==2.9.11
+requests==2.32.5
