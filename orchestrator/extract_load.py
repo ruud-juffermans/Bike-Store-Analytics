@@ -83,7 +83,7 @@ def main():
     warehouse_conn = psycopg2.connect(**WAREHOUSE_DB)
 
     # Create raw schema and tables in warehouse
-    print("\nCreating raw schema in warehouse...")
+    print("Creating raw schema in warehouse...")
     with open("/orchestrator/raw_schema.sql", "r") as f:
         warehouse_conn.cursor().execute(f.read())
     warehouse_conn.commit()
