@@ -7,7 +7,7 @@ The project demonstrates a complete modern data stack: containerized infrastruct
 
 ```
 ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│  primary-system  │     │   orchestrator   │     │   datawarehouse  │     │     superset     │
+│  primary_system  │     │   orchestrator   │     │   datawarehouse  │     │     superset     │
 │                  │     │                  │     │                  │     │                  │
 │  Source DB       │────▶│  Python EL       │────▶│  raw (tables)    │     │  Dashboards      │
 │  (PostgreSQL)    │     │  pipeline        │     │  staging (views) │────▶│ (Apache Superset)│
@@ -42,3 +42,17 @@ CSV Files → Source DB → [EL Pipeline] → Warehouse raw schema
 | EL Pipeline | Python + psycopg2 | Extract from source, load to warehouse |
 | Transformation | dbt-core + dbt-postgres | Staging views, dimensional models, tests |
 | BI / Visualization | Apache Superset | Interactive dashboards |
+
+## primary-system
+
+**Test:**
+```bash
+docker compose up -d primary_system
+# Wait for healthy, then:
+docker exec primary_system psql -U primary_user -d primary_system \
+  -c "SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
+# Should list 9 tables
+docker exec primary_system psql -U primary_user -d primary_system \
+  -c "SELECT count(*) FROM orders;"
+# Should return 1615
+```
